@@ -75,6 +75,10 @@
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* space between buttons */
+  margin-top: 25px;
 }
 
 .hero-image {
@@ -237,6 +241,8 @@
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: white;
   text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .cta h2 {
@@ -254,6 +260,11 @@
 .cta .btn {
   background-color: white;
   color: var(--primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem; /* space between buttons */
+  margin-top: 2rem;
 }
 
 .cta .btn:hover {

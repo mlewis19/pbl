@@ -151,7 +151,7 @@ const Landing = () => {
             <Link to="/register" className="btn btn-lg">
               Create Account
             </Link>
-            <Link to="/login" className="btn btn-outline btn-lg" style={{borderColor: 'white', color: 'white'}}>
+            <Link to="/login" className="btn btn-outline btn-lg" >
               Sign In
             </Link>
           </div>

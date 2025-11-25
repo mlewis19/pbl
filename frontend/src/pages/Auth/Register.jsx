@@ -14,7 +14,8 @@ const Register = () => {
     confirmPassword: '',
     role: initialRole,
     phone: '',
-    about: ''
+    about: '',
+    address: ''
   });
 
   const [error, setError] = useState('');
@@ -51,7 +52,8 @@ const Register = () => {
         formData.password,
         formData.role,
         formData.phone,
-        formData.about
+        formData.about,
+        formData.address
       );
 
       if (!res.success) {
@@ -141,6 +143,20 @@ const Register = () => {
                 required
               />
             </div>
+
+            <div className="form-group">
+              <label className="form-label">Address</label>
+                <input
+                  type="text"
+                  name="address"
+                  className="form-input"
+                  placeholder="Enter your address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  required
+                />
+            </div>
+
 
             {formData.role === 'producer' && (
               <div className="form-group">

@@ -9,7 +9,7 @@ import "./ProducerDashboard.css";
 const API_URL = "http://localhost:5000/api";
 
 const ProducerDashboard = () => {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
@@ -17,8 +17,7 @@ const ProducerDashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
 
-  
-const token = user?.token;
+
 
 const { isDark, toggleTheme } = useTheme();
 
