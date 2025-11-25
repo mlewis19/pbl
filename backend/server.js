@@ -4,7 +4,7 @@ const cors = require('cors');
 const path = require('path');
 
 const connectDB = require('./config/db');
-
+const reviewRoutes = require("./routes/reviewRoutes");
 const app = express();
 
 // Connect to DB
@@ -21,6 +21,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/orders', require('./routes/orders'));
+app.use("/api/reviews", reviewRoutes);
 
 // Basic health
 app.get('/', (req, res) => res.send('Backend up'));

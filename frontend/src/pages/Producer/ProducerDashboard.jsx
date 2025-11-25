@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import AddProductModal from "../../components/AddProductModal/AddProductModal";
 import { useTheme } from "../../context/ThemeContext";
+import ReviewModal from "../../components/ReviewModal/ReviewModal";
 
 import "./ProducerDashboard.css";
 
@@ -16,6 +17,8 @@ const ProducerDashboard = () => {
   const [loadingOrders, setLoadingOrders] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+const [reviewList, setReviewList] = useState([]);
 
 
 
@@ -41,30 +44,32 @@ const { isDark, toggleTheme } = useTheme();
     }
   };
 
-  useEffect(() => {
-    fetchProducts();
-  }, [user]);
+useEffect(() => {
+  if (!user?._id) return; // prevents crash
+  fetchProducts();
+}, [user]);
 
-  // FETCH ORDERS
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoadingOrders(true);
-        const res = await axios.get(
-  `${API_URL}/orders/producer/${user._id}`,
-  {
-    headers: { Authorization: `Bearer ${token}` }
-  }
-);
+useEffect(() => {
+  if (!user?._id) return; // prevents crash
 
-        setOrders(res.data);
-      } catch (e) {
-        console.log("Order fetch error:", e);
-      } finally {
-        setLoadingOrders(false);
-      }
-    })();
-  }, [user]);
+  (async () => {
+    try {
+      setLoadingOrders(true);
+
+      const res = await axios.get(
+        `${API_URL}/orders/producer/${user._id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setOrders(res.data);
+    } catch (e) {
+      console.log("Order fetch error:", e);
+    } finally {
+      setLoadingOrders(false);
+    }
+  })();
+}, [user]);
+
 
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this product?")) return;
@@ -83,11 +88,26 @@ const { isDark, toggleTheme } = useTheme();
     }
   };
 
-  const onAddEditSuccess = () => {
-    setShowModal(false);
-    setEditProduct(null);
-    fetchProducts();
-  };
+  const onAddEditSuccess = (updatedProduct) => {
+  setShowModal(false);
+  setEditProduct(null);
+
+  setProducts(prev =>
+    prev.some(p => p._id === updatedProduct._id)
+      ? prev.map(p => p._id === updatedProduct._id ? updatedProduct : p)
+      : [updatedProduct, ...prev]
+  );
+};
+
+const openReviews = async (productId) => {
+  try {
+    const res = await axios.get(`${API_URL}/reviews/${productId}`);
+    setReviewList(res.data);
+    setShowReviewModal(true);
+  } catch (error) {
+    console.log("Review fetch error:", error);
+  }
+};
 
   return (
     <div className="producer-dashboard">
@@ -135,7 +155,7 @@ const { isDark, toggleTheme } = useTheme();
 
 
       
-
+<h1 style={{ textAlign: "center", width: "100%" }}>My Products</h1>
 
       {/* PRODUCT LIST */}
       <section className="products-section">
@@ -147,7 +167,16 @@ const { isDark, toggleTheme } = useTheme();
     <div className="product-grid">
       {products.map((p) => (
         <div key={p._id} className="product-tile">
-          <img className="product-img" src={p.images?.[0] || "/placeholder.png"} alt={p.title} />
+          <img
+  className="product-img"
+  src={
+    p.images?.[0]
+      ? `http://localhost:5000${p.images[0]}`
+      : "/placeholder.png"
+  }
+  alt={p.title}
+/>
+
 
           <div className="product-info">
             <h3>{p.title}</h3>
@@ -158,9 +187,36 @@ const { isDark, toggleTheme } = useTheme();
           </div>
 
           <div className="tile-actions">
-            <button className="btn btn-outline" onClick={() => { setEditProduct(p); setShowModal(true); }}>Edit</button>
-            <button className="btn btn-danger" onClick={() => handleDelete(p._id)}>Delete</button>
-          </div>
+            
+  <button
+    className="btn btn-outline"
+    onClick={() => {
+      setEditProduct(p);
+      setShowModal(true);
+    }}
+  >
+    Edit
+  </button>
+
+  <button
+    className="btn btn-danger"
+    onClick={() => handleDelete(p._id)}
+  >
+    Delete
+  </button>
+  
+
+  {/* VIEW REVIEWS — BELOW */}
+  <button
+    className="btn btn-secondary"
+    style={{ marginTop: "10px", width: "100%" }}
+    onClick={() => openReviews(p._id)}
+  >
+    View Reviews
+  </button>
+</div>
+
+
         </div>
       ))}
     </div>
@@ -170,25 +226,53 @@ const { isDark, toggleTheme } = useTheme();
 
       {/* ORDERS SECTION */}
       <section className="orders-section">
-        <h2>Recent Orders</h2>
+  <h1 style={{ textAlign: "center", width: "100%" }}>Recent Orders</h1>
 
-        {loadingOrders ? (
-          <p>Loading orders...</p>
-        ) : orders.length === 0 ? (
-          <p>No orders received yet.</p>
-        ) : (
-          <div className="orders-list">
-            {orders.map((order) => (
-              <div key={order._id} className="order-item">
-                <h4>{order.productName}</h4>
-                <p>Quantity: {order.quantity}</p>
-                <p>Total: ₹{order.totalPrice}</p>
-                <p>Buyer: {order.consumerName}</p>
-              </div>
-            ))}
+
+  {loadingOrders ? (
+    <p>Loading orders...</p>
+  ) : orders.length === 0 ? (
+    <p>No orders received yet.</p>
+  ) : (
+    <div className="orders-grid">
+      {orders.map((order) => (
+        <div key={order._id} className="order-card">
+          <img
+  className="order-img"
+  src={
+    order.productId?.images?.[0]
+      ? `http://localhost:5000${order.productId.images[0]}`
+      : "/placeholder.png"
+  }
+  alt={order.productId?.title}
+/>
+
+
+
+           <h3 className="order-title">{order.productId?.title}</h3>
+
+
+          <div className="order-info">
+            <p><strong>Quantity:</strong> {order.quantity}</p>
+            <p><strong>Total Price:</strong> ₹{order.totalPrice}</p>
+            <p><strong>Buyer:</strong> {order.consumer?.name}</p>
+            <p><strong>Address:</strong> {order.consumer?.address}</p>
+            <p><strong>Delivery:</strong> {order.deliveryType}</p>
+            <p><strong>Payment Mode:</strong> {order.paymentMode}</p>
+            <p><strong>Status:</strong> {order.paymentStatus}</p>
           </div>
-        )}
-      </section>
+
+          <div className="order-actions">
+            <button className="order-approve-btn">Approve Order</button>
+            <button className="order-cancel-btn">Cancel Order</button>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</section>
+
+
 
       {showModal && (
         <AddProductModal
@@ -197,6 +281,14 @@ const { isDark, toggleTheme } = useTheme();
           onSuccess={onAddEditSuccess}
         />
       )}
+
+      {showReviewModal && (
+  <ReviewModal
+    reviews={reviewList}
+    onClose={() => setShowReviewModal(false)}
+  />
+)}
+
     </div>
   );
 };

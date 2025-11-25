@@ -87,12 +87,6 @@ const handleSubmit = async (e) => {
     return;
   }
 
-  if (!user || !user._id) {
-    setError("User not logged in");
-    setLoading(false);
-    return;
-  }
-
   try {
     const newFormData = new FormData();
     newFormData.append("title", formData.title);
@@ -100,31 +94,48 @@ const handleSubmit = async (e) => {
     newFormData.append("quantity", formData.quantity);
     newFormData.append("price", formData.price);
     newFormData.append("description", formData.description);
-    newFormData.append("producerId", user._id);   // 🔥 IMPORTANT
 
-    // Default image fallback
-    if (imageFiles.length === 0) {
-      const defaultBlob = await fetch('/src/assets/default-product.jpg')
-        .then(res => res.blob());
-      newFormData.append("images", defaultBlob, "default-product.jpg");
-    } else {
-      imageFiles.forEach(file => {
+    // Send new images ONLY if user selected some
+    if (imageFiles.length > 0) {
+      imageFiles.forEach((file) => {
         newFormData.append("images", file);
       });
     }
 
-    const res = await axios.post(
-      "http://localhost:5000/api/products",
-      newFormData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
-    );
+    let res;
+
+    if (product && product._id) {
+      // =====================================
+      // UPDATE (PUT) — EDIT mode
+      // =====================================
+      res = await axios.put(
+        `http://localhost:5000/api/products/${product._id}`,
+        newFormData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+    } else {
+      // =====================================
+      // CREATE (POST) — Add new product
+      // =====================================
+      res = await axios.post(
+        "http://localhost:5000/api/products",
+        newFormData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+    }
 
     if (onSuccess) onSuccess(res.data);
+
   } catch (err) {
     console.error(err);
     setError("Failed to save product");
@@ -132,6 +143,7 @@ const handleSubmit = async (e) => {
     setLoading(false);
   }
 };
+
 
 
   return (

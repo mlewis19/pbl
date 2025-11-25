@@ -202,10 +202,9 @@ useEffect(() => {
 
                 const imageSrc =
                   product.images?.length > 0
-                    ? product.images[0].startsWith("http")
-                      ? product.images[0]
-                      : `http://localhost:5000/${product.images[0]}`
-                    : null;
+                  ? `http://localhost:5000${product.images[0]}`
+                  : null;
+
 
                 return (
                   <div

@@ -120,4 +120,79 @@ router.post('/', auth, upload.array('images', 6), async (req, res) => {
   }
 });
 
+// ============================
+// UPDATE PRODUCT
+// ============================
+router.put('/:id', auth, upload.array('images', 6), async (req, res) => {
+  try {
+    const {
+      title,
+      category,
+      quantity,
+      unit,
+      price,
+      description,
+      location,
+      lat,
+      lng
+    } = req.body;
+
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+
+    // Only allow editing OWN products
+    if (product.producerId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    const newImages = req.files.map(f => `/uploads/${f.filename}`);
+
+    product.title = title;
+    product.category = category;
+    product.quantity = Number(quantity);
+    product.unit = unit || product.unit;
+    product.price = Number(price);
+    product.description = description;
+    product.location = location;
+    product.lat = lat ? Number(lat) : product.lat;
+    product.lng = lng ? Number(lng) : product.lng;
+
+    // If new images uploaded → replace old
+    if (newImages.length > 0) {
+      product.images = newImages;
+    }
+
+    await product.save();
+
+    res.json(product);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+// ============================
+// DELETE PRODUCT
+// ============================
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: "Not found" });
+
+    // only own product
+    if (product.producerId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    await product.deleteOne();
+    res.json({ message: "Product deleted" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 module.exports = router;
