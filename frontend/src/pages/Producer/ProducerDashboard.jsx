@@ -50,25 +50,10 @@ useEffect(() => {
 }, [user]);
 
 useEffect(() => {
-  if (!user?._id) return; // prevents crash
-
-  (async () => {
-    try {
-      setLoadingOrders(true);
-
-      const res = await axios.get(
-        `${API_URL}/orders/producer/${user._id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      setOrders(res.data);
-    } catch (e) {
-      console.log("Order fetch error:", e);
-    } finally {
-      setLoadingOrders(false);
-    }
-  })();
+  if (!user?._id) return;
+  fetchOrders();
 }, [user]);
+
 
 
   const handleDelete = async (id) => {
@@ -108,6 +93,60 @@ const openReviews = async (productId) => {
     console.log("Review fetch error:", error);
   }
 };
+
+const fetchOrders = async () => {
+  try {
+    setLoadingOrders(true);
+
+    const res = await axios.get(
+      `${API_URL}/orders/producer/${user._id}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    setOrders(res.data);
+  } catch (error) {
+    console.log("Order fetch error:", error);
+  } finally {
+    setLoadingOrders(false);
+  }
+};
+
+const approveOrder = async (id) => {
+  try {
+    const res = await axios.patch(`http://localhost:5000/api/orders/${id}/approve`);
+
+    alert("Order Approved ✔");
+
+    // Update local UI
+    setOrders((prev) =>
+      prev.map((o) =>
+        o._id === id ? { ...o, status: "confirmed", isApproved: true } : o
+      )
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
+const cancelOrder = async (id) => {
+  try {
+    const res = await axios.patch(`http://localhost:5000/api/orders/${id}/cancel`);
+
+    alert("Order Cancelled ❌");
+
+    setOrders((prev) =>
+      prev.map((o) =>
+        o._id === id ? { ...o, status: "cancelled", isApproved: false } : o
+      )
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
+
 
   return (
     <div className="producer-dashboard">
@@ -235,42 +274,82 @@ const openReviews = async (productId) => {
     <p>No orders received yet.</p>
   ) : (
     <div className="orders-grid">
-      {orders.map((order) => (
-        <div key={order._id} className="order-card">
-          <img
-  className="order-img"
-  src={
-    order.productId?.images?.[0]
-      ? `http://localhost:5000${order.productId.images[0]}`
-      : "/placeholder.png"
-  }
-  alt={order.productId?.title}
-/>
+  {orders.map((order) => (
+    <div key={order._id} className="order-card">
+      <img
+        className="order-img"
+        src={
+          order.productId?.images?.[0]
+            ? `http://localhost:5000${order.productId.images[0]}`
+            : "/placeholder.png"
+        }
+        alt={order.productId?.title}
+      />
 
+      <h3 className="order-title">{order.productId?.title}</h3>
 
+      <div className="order-info">
+        <p><strong>Quantity:</strong> {order.quantity}</p>
+        <p><strong>Total Price:</strong> ₹{order.totalPrice}</p>
+        <p><strong>Buyer:</strong> {order.consumerId?.name}</p>
+<p><strong>Address:</strong> {order.consumerId?.address}</p>
+        <p><strong>Delivery:</strong> {order.deliveryType}</p>
+        
 
-           <h3 className="order-title">{order.productId?.title}</h3>
+        {/* ✔ SHOW LIVE ORDER STATUS */}
+        <p>
+          <strong>Status:</strong>{" "}
+          {order.status === "confirmed" ? (
+            <span style={{ color: "green", fontWeight: "bold" }}>Approved ✔</span>
+          ) : order.status === "cancelled" ? (
+            <span style={{ color: "red", fontWeight: "bold" }}>Cancelled ❌</span>
+          ) : (
+            <span style={{ color: "orange", fontWeight: "bold" }}>Pending ⏳</span>
+          )}
+        </p>
+      </div>
 
+      <div className="order-actions">
 
-          <div className="order-info">
-            <p><strong>Quantity:</strong> {order.quantity}</p>
-            <p><strong>Total Price:</strong> ₹{order.totalPrice}</p>
-            <p><strong>Buyer:</strong> {order.consumer?.name}</p>
-            <p><strong>Address:</strong> {order.consumer?.address}</p>
-            <p><strong>Delivery:</strong> {order.deliveryType}</p>
-            <p><strong>Payment Mode:</strong> {order.paymentMode}</p>
-            <p><strong>Status:</strong> {order.paymentStatus}</p>
-          </div>
+        {/* 🔥 SHOW BUTTONS ONLY IF PENDING */}
+        {order.status === "placed" && (
+          <>
+            <button
+              className="btn approve-btn"
+              onClick={async () => {
+                await approveOrder(order._id);
+                alert("Order Approved Successfully!");
+              }}
+            >
+              Approve Order
+            </button>
 
-          <div className="order-actions">
-            <button className="order-approve-btn">Approve Order</button>
-            <button className="order-cancel-btn">Cancel Order</button>
-          </div>
-        </div>
-      ))}
+            <button
+              className="order-cancel-btn"
+              onClick={async () => {
+                await cancelOrder(order._id);
+                alert("Order Cancelled");
+              }}
+            >
+              Cancel Order
+            </button>
+          </>
+        )}
+
+        {/* ❗ If already approved / cancelled → hide buttons */}
+        {order.status !== "placed" && (
+          <p style={{ fontWeight: "bold", marginTop: "10px", opacity: 0.6 }}>
+            {order.status === "confirmed" ? "This order is approved." : "This order is cancelled."}
+          </p>
+        )}
+      </div>
     </div>
+  ))}
+</div>
+
   )}
 </section>
+
 
 
 

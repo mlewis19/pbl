@@ -13,6 +13,7 @@ const OrderPage = () => {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [deliveryMethod, setDeliveryMethod] = useState("delivery");
+  const [showPopup, setShowPopup] = useState(false);
 
   const { isDark, toggleTheme } = useTheme();
   const consumer = JSON.parse(localStorage.getItem("user"));
@@ -24,7 +25,7 @@ const OrderPage = () => {
       .catch((err) => console.log(err));
   }, [id]);
 
-  // PLACE ORDER → then navigate to PAYMENT PAGE
+  // PLACE ORDER → SHOW POPUP (NO PAYMENT)
   const placeOrder = async () => {
     try {
       const res = await fetch("http://localhost:5000/api/orders", {
@@ -43,8 +44,7 @@ const OrderPage = () => {
       const data = await res.json();
       if (!res.ok) throw new Error("Order failed");
 
-      // go to PAYMENT PAGE
-      navigate(`/payment/${data._id}`);
+      setShowPopup(true); // show success popup
     } catch (err) {
       console.log(err);
     }
@@ -54,7 +54,7 @@ const OrderPage = () => {
 
   return (
     <>
-      {/* ───────── HEADER (same as consumer dashboard) ───────── */}
+      {/* HEADER */}
       <header className="consumer-header">
         <div className="header-left">
           <div className="header-logo-icon">🌾</div>
@@ -82,14 +82,12 @@ const OrderPage = () => {
         </div>
       </header>
 
-      {/* ───────── MAIN CHECKOUT LAYOUT ───────── */}
+      {/* MAIN CHECKOUT */}
       <div className="checkout-wrapper">
-
-        {/* LEFT SIDE */}
         <div className="checkout-left">
           <h2>Checkout</h2>
 
-          {/* DELIVERY / PICKUP BOX */}
+          {/* DELIVERY METHOD */}
           <div className="checkout-box">
             <h3 className="section-title">Delivery Method</h3>
 
@@ -144,7 +142,7 @@ const OrderPage = () => {
             </div>
           </div>
 
-          {/* SHIPPING ADDRESS (only for Delivery) */}
+          {/* SHIPPING ADDRESS */}
           {deliveryMethod === "delivery" && (
             <div className="checkout-box">
               <h3 className="section-title">Shipping Address</h3>
@@ -159,7 +157,7 @@ const OrderPage = () => {
           )}
         </div>
 
-        {/* RIGHT SIDE SUMMARY */}
+        {/* SUMMARY */}
         <div className="checkout-right">
           <h3>Order Summary</h3>
 
@@ -186,10 +184,29 @@ const OrderPage = () => {
           </div>
 
           <button className="place-order-btn" onClick={placeOrder}>
-            Place order
+            Place Order
           </button>
         </div>
       </div>
+
+      {/* POPUP */}
+      {showPopup && (
+  <div className="popup-overlay">
+    <div className="popup-box">
+      <h2>Order Placed Successfully ✔</h2>
+      <p>Your order is waiting for the producer's approval.</p>
+
+      <button className="popup-btn" onClick={() => setShowPopup(false)}>
+        Close
+      </button>
+
+      <a className="popup-link" href="/consumer/my-orders">
+        Go to My Orders →
+      </a>
+    </div>
+  </div>
+)}
+
 
       <Footer />
     </>

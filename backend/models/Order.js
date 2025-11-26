@@ -32,6 +32,12 @@ const OrderSchema = new mongoose.Schema({
     default: "placed" 
   },
 
+  // ⭐ NEW FIELD — Needed for enabling "Proceed to Payment"
+  isApproved: { 
+    type: Boolean, 
+    default: false 
+  },
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('Order', OrderSchema);
