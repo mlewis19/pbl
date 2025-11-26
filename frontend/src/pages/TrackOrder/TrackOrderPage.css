@@ -1,12 +1,75 @@
 .track-container {
+  max-width: 700px;
+  margin: 30px auto;
   padding: 40px;
   text-align: center;
+  background: #fafafa;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.track-container h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.track-container p {
+  color: #555;
+  margin-bottom: 20px;
 }
 
 .map-img {
+  display: block;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 580px;
+  border-radius: 12px;
+  box-shadow: 0 3px 18px rgba(0,0,0,0.06);
+  margin-bottom: 50px; 
+}
+
+
+.review-btn {
+  background: var(--primary-dark);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  width: 200px;
+}
+
+.review-btn:hover {
+  background: var(--primary);
+}
+
+.review-btn:disabled {
+  background: #b5b5b5;
+  cursor: not-allowed;
+}
+
+
+.back-home-btn {
+  background: var(--tertiary);
+  color: var(--primary-dark);
+  border: 2px solid #4caf50;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  width: 200px;
   margin-top: 20px;
-  width: 80%;
-  max-width: 600px;
-  border-radius: 14px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.back-home-btn:hover {
+  background: var(--tertiary);
 }

@@ -68,7 +68,7 @@ router.get("/producer/:producerId", async (req, res) => {
   }
 });
 
-// GET SINGLE ORDER (required for PaymentPage)
+// GET SINGLE ORDER
 router.get("/:orderId", async (req, res) => {
   try {
     const { orderId } = req.params;
@@ -82,12 +82,13 @@ router.get("/:orderId", async (req, res) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    res.json(order);
+    res.json({ order });   // <-- FIX
   } catch (err) {
     console.error("Get Order Error:", err);
     res.status(500).json({ message: "Server Error" });
   }
 });
+
 
 
 module.exports = router;

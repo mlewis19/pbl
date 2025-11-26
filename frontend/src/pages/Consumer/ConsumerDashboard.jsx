@@ -107,6 +107,13 @@ useEffect(() => {
   {isDark ? "☀️" : "🌙"}
 </button>
 
+    <button
+  className="btn orders-btn"
+  onClick={() => navigate("/consumer/my-orders")}
+>
+  My Orders
+</button>
+
 
     <button
       className="btn logout-btn"

@@ -10,6 +10,7 @@ import ProducerDashboard from './pages/Producer/ProducerDashboard.jsx';
 import ConsumerDashboard from './pages/Consumer/ConsumerDashboard.jsx';
 import ProductDetails from './pages/Consumer/ProductDetails.jsx';
 import OrderPage from "./pages/Consumer/OrderPage";
+import MyOrdersPage from "./pages/Consumer/MyOrdersPage";
 
 import PaymentPage from "./pages/PaymentPage/PaymentPage.jsx";
 import PaymentSuccessPage from "./pages/PaymentSuccess/PaymentSuccess.jsx";
@@ -32,6 +33,8 @@ function App() {
       <Route path="/consumer/dashboard" element={<ConsumerDashboard />} />
       <Route path="/consumer/product/:productId" element={<ProductDetails />} />
       <Route path="/consumer/order/:id" element={<OrderPage />} />
+      <Route path="/consumer/my-orders" element={<MyOrdersPage />} />
+      
 
       {/* Payment Flow */}
       <Route path="/payment/:orderId" element={<PaymentPage />} />

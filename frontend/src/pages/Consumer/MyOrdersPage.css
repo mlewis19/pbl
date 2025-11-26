@@ -1,0 +1,65 @@
+.my-orders-container {
+  padding: 40px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.my-orders-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.order-card {
+  display: flex;
+  gap: 20px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.order-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.order-info {
+  flex: 1;
+}
+
+.order-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+}
+
+.track-btn,
+.review-btn {
+  padding: 10px 14px;
+  border: none;
+  background: #4caf50;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.review-btn {
+  background: #2196f3;
+}
+
+.track-btn:hover {
+  background: #449d48;
+}
+
+.review-btn:hover {
+  background: #1e88e5;
+}

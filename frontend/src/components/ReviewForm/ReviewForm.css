@@ -1,0 +1,138 @@
+/* ===== BACKDROP ===== */
+.review-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* ===== FORM CONTAINER ===== */
+.review-form-container {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 14px;
+  width: 420px;
+  text-align: center;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.18);
+  animation: fadeIn 0.25s ease;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Header */
+.review-form-container h2 {
+  margin-bottom: 15px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* ===== RATING LABEL ===== */
+.review-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* ===== STARS ===== */
+.stars-container {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  font-size: 34px;
+  margin-bottom: 20px;
+}
+
+.star {
+  color: #ccc;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.star.filled {
+  color: gold;
+}
+
+.star:hover {
+  transform: scale(1.2);
+}
+
+/* ===== TEXTAREA ===== */
+.review-input {
+  width: 100%;
+  height: 90px;
+  padding: 12px;
+  border-radius: 10px;
+  resize: none;
+  border: 1px solid #ccc;
+  background: white;
+  margin-bottom: 20px;
+}
+
+.review-input:focus {
+  border-color: #4caf50;
+  outline: none;
+}
+
+/* ===== SUBMIT BUTTON ===== */
+.review-submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.review-submit-btn:hover {
+  background: #3fa447;
+}
+
+/* ===== CANCEL BUTTON ===== */
+.review-cancel-btn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 12px;
+  background: #ccc;
+  color: #333;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.review-cancel-btn:hover {
+  background: #b6b6b6;
+}
+
+/* ===== CLOSE "X" BUTTON ===== */
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: 0.2s;
+}
+
+.close-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}

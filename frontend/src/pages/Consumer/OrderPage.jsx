@@ -186,7 +186,7 @@ const OrderPage = () => {
           </div>
 
           <button className="place-order-btn" onClick={placeOrder}>
-            Proceed to Payment
+            Place order
           </button>
         </div>
       </div>
