@@ -17,6 +17,8 @@ const OrderPage = () => {
 
   const { isDark, toggleTheme } = useTheme();
   const consumer = JSON.parse(localStorage.getItem("user"));
+  const [showAddressPopup, setShowAddressPopup] = useState(false);
+const [address, setAddress] = useState(consumer.address || "");
 
   useEffect(() => {
     fetch(`http://localhost:5000/api/products/${id}`)
@@ -152,7 +154,13 @@ const OrderPage = () => {
                 {consumer.address || "No address added"}
               </p>
 
-              <button className="add-address-btn">Add / Change Address</button>
+              <button 
+  className="add-address-btn"
+  onClick={() => setShowAddressPopup(true)}
+>
+  Add / Change Address
+</button>
+
             </div>
           )}
         </div>
@@ -206,6 +214,39 @@ const OrderPage = () => {
     </div>
   </div>
 )}
+{showAddressPopup && (
+  <div className="popup-overlay">
+    <div className="popup-box">
+      <h2>Edit Address</h2>
+
+      <textarea
+        className="address-input"
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+        placeholder="Enter your full address"
+      />
+
+      <button
+        className="popup-btn"
+        onClick={() => {
+          const updatedConsumer = { ...consumer, address };
+          localStorage.setItem("user", JSON.stringify(updatedConsumer));
+          setShowAddressPopup(false);
+        }}
+      >
+        Save Address
+      </button>
+
+      <button
+        className="popup-btn cancel-btn"
+        onClick={() => setShowAddressPopup(false)}
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+)}
+
 
 
       <Footer />
