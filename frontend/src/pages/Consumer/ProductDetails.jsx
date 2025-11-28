@@ -38,7 +38,7 @@ const ProductDetails = () => {
     if (!img) return null;
     return img.startsWith("http")
       ? img
-      : `http://localhost:5000/${img}`;
+      : `http://localhost:5000${img}`;
   };
 
   return (
