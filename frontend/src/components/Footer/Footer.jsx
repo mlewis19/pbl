@@ -44,7 +44,7 @@ const Footer = () => {
               <h3>Contact Us</h3>
               <ul className="footer-links">
                 <li>📍 Mangalore, Karnataka</li>
-                <li>📧 support@kisankart.com</li>
+                <li>📧 support@kisancart.com</li>
                 <li>📞 +91 12345 67890</li>
                 <li>⏰ Mon - Sat: 6 AM - 8 PM</li>
               </ul>
