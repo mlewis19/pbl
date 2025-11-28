@@ -40,7 +40,7 @@ const Landing = () => {
       <section className="about">
         <div className="container">
           <div className="section-header">
-            <h2>About Kisan Kart</h2>
+            <h2>About Kisan Cart</h2>
             <p>Revolutionizing the way you buy fresh produce</p>
           </div>
           <div className="about-content">
@@ -50,7 +50,7 @@ const Landing = () => {
             <div className="about-text">
               <h3>Empowering Farmers, Delighting Consumers</h3>
               <p>
-                Kisan Kart is a revolutionary platform that connects farmers directly 
+                Kisan Cart is a revolutionary platform that connects farmers directly 
                 with consumers in Mangalore. We believe in fair prices for farmers 
                 and fresh produce for families.
               </p>
@@ -86,7 +86,7 @@ const Landing = () => {
       <section className="why-choose">
         <div className="container">
           <div className="section-header">
-            <h2>Why Choose Kisan Kart?</h2>
+            <h2>Why Choose Kisan Cart?</h2>
             <p>Experience the difference of farm-fresh produce</p>
           </div>
           <div className="features-grid">

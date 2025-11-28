@@ -78,7 +78,7 @@ const Register = () => {
           <div className="auth-header">
             <div className="auth-logo">🌾</div>
             <h2>Create Account</h2>
-            <p>Join Kisan Kart today</p>
+            <p>Join Kisan Cart today</p>
           </div>
 
           {/* Role Selection */}

@@ -61,7 +61,7 @@ const [address, setAddress] = useState(consumer.address || "");
         <div className="header-left">
           <div className="header-logo-icon">🌾</div>
           <div className="header-logo-text">
-            <h1>Kisan Kart</h1>
+            <h1>Kisan Cart</h1>
             <p>Farm to Table, Direct</p>
           </div>
         </div>

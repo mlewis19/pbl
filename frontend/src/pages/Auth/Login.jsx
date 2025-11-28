@@ -37,7 +37,7 @@ const Login = () => {
           <div className="auth-header">
             <div className="auth-logo">🌾</div>
             <h2>Welcome Back!</h2>
-            <p>Sign in to continue to Kisan Kart</p>
+            <p>Sign in to continue to Kisan Cart</p>
           </div>
 
           <div className="role-selector">

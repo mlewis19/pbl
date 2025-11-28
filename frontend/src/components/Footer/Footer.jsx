@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="footer-content">
           <div className="footer-grid">
             <div className="footer-section">
-              <h3>🌾 Kisan Kart</h3>
+              <h3>🌾 Kisan Cart</h3>
               <p>
                 Connecting farmers directly with consumers in Mangalore. 
                 Fresh produce, fair prices, no middlemen.
@@ -52,7 +52,7 @@ const Footer = () => {
           </div>
 
           <div className="footer-bottom">
-            <p>&copy; {new Date().getFullYear()} Kisan Kart. All rights reserved. | Made with ❤️ for farmers</p>
+            <p>&copy; {new Date().getFullYear()} Kisan Cart. All rights reserved. | Made with ❤️ for farmers</p>
           </div>
         </div>
       </div>
